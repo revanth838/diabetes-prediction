@@ -1,190 +1,170 @@
-# Diabetes Prediction System 🩺
+# Diabetes Prediction System
 
-An AI-powered web application that predicts the likelihood of diabetes in a patient based on health parameters using Machine Learning. Built with Python, Scikit-learn, and Flask.
-
----
-
-## 📌 Project Overview
-
-This project uses the **PIMA Indians Diabetes Dataset** to train multiple machine learning models and predict whether a patient is diabetic or not. The best-performing model is deployed as a web application where users can enter health values and get an instant prediction with a probability score.
+A machine learning web app that takes basic health inputs from a patient and tells whether they are likely to have diabetes or not. I built this as my final year project using Python and Flask.
 
 ---
 
-## 🎯 Features
+## Why I Built This
 
-- Trained and compared 3 ML models — Logistic Regression, Random Forest, SVM
-- Automatically selects the best model based on accuracy
-- Clean web interface to enter patient data
-- Shows prediction result with risk probability percentage
-- Visual risk bar for easy understanding
-- EDA charts: correlation heatmap, confusion matrix, model comparison
+Diabetes is one of the most common chronic diseases worldwide, and early detection can make a huge difference in treatment outcomes. Most people don't get tested until symptoms appear. This tool lets anyone enter simple health values and instantly know their risk level — no lab visit needed for a preliminary check.
 
 ---
 
-## 🗂️ Project Structure
+## What It Does
+
+You open the web app, fill in 8 health details like glucose level, BMI, age, and blood pressure, hit the predict button, and it tells you whether you are diabetic or not along with a risk probability percentage.
+
+Behind the scenes, three different ML models were trained on real patient data. The one with the best accuracy was saved and connected to the Flask web app.
+
+---
+
+## Project Structure
 
 ```
 diabetes_prediction/
 │
 ├── data/
-│   └── diabetes.csv              # PIMA Indians Diabetes Dataset
-│
+│   └── diabetes.csv
 ├── model/
-│   ├── model.pkl                 # Saved best ML model
-│   └── scaler.pkl                # Saved StandardScaler
-│
+│   ├── model.pkl
+│   └── scaler.pkl
 ├── templates/
-│   ├── index.html                # Input form page
-│   └── result.html               # Prediction result page
-│
+│   ├── index.html
+│   └── result.html
 ├── static/
-│   ├── style.css                 # Stylesheet
-│   ├── heatmap.png               # Correlation heatmap (auto-generated)
-│   ├── confusion_matrix.png      # Confusion matrix (auto-generated)
-│   └── model_comparison.png      # Model accuracy chart (auto-generated)
-│
-├── train_model.py                # ML training script
-├── app.py                        # Flask web application
-├── requirements.txt              # Python dependencies
-└── README.md                     # Project documentation
+│   ├── style.css
+│   ├── heatmap.png
+│   ├── confusion_matrix.png
+│   └── model_comparison.png
+├── train_model.py
+├── app.py
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## 🧠 Dataset
+## Dataset
 
-- **Name:** PIMA Indians Diabetes Dataset
-- **Source:** [Kaggle](https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database)
-- **Records:** 768 patients
-- **Features:** 8 health parameters
-- **Target:** Outcome (1 = Diabetic, 0 = Not Diabetic)
+I used the PIMA Indians Diabetes Dataset from Kaggle. It has records of 768 female patients with 8 health features each. The dataset is widely used in healthcare ML research and is publicly available.
 
-### Input Features
+Source: https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database
 
-| Feature | Description |
+The 8 input features are:
+
+| Feature | What it means |
 |---|---|
-| Pregnancies | Number of times pregnant |
-| Glucose | Plasma glucose concentration (mg/dL) |
-| BloodPressure | Diastolic blood pressure (mm Hg) |
-| SkinThickness | Triceps skin fold thickness (mm) |
-| Insulin | 2-Hour serum insulin (mu U/ml) |
-| BMI | Body mass index (kg/m²) |
-| DiabetesPedigreeFunction | Diabetes hereditary score |
-| Age | Age of the patient (years) |
+| Pregnancies | How many times the patient has been pregnant |
+| Glucose | Blood sugar level measured in mg/dL |
+| BloodPressure | Diastolic blood pressure in mm Hg |
+| SkinThickness | Triceps skin fold thickness in mm |
+| Insulin | Serum insulin level after 2 hours |
+| BMI | Body mass index (weight/height ratio) |
+| DiabetesPedigreeFunction | A score based on family history of diabetes |
+| Age | Patient age in years |
 
 ---
 
-## 🤖 Models Trained & Compared
+## Models I Trained
 
-| Model | Description |
-|---|---|
-| Logistic Regression | Simple, interpretable baseline model |
-| Random Forest | Ensemble of decision trees, handles non-linearity |
-| SVM (RBF Kernel) | Effective for high-dimensional health data |
-
-> The best performing model is automatically saved and used in the web app.
-
----
-
-## 📊 Results
+I trained three models and compared their accuracy on the test set:
 
 | Model | Accuracy |
 |---|---|
 | Logistic Regression | ~77% |
 | Random Forest | ~79% |
-| SVM | ~78% |
+| SVM (RBF Kernel) | ~78% |
 
-**Best Model: Random Forest** with approximately **79% accuracy**
-
-### Test Case Results
-
-| Test | Input Profile | Prediction | Probability |
-|---|---|---|---|
-| Case 1 | High glucose, high BMI, age 50 | Diabetic | 86% |
-| Case 2 | Low glucose, normal BMI, age 31 | Not Diabetic | 1% |
+Random Forest came out on top with around 79% accuracy, so that's the one saved and used in the app. The training script automatically picks whichever model scores highest, so if you retrain with different data it will still pick the best one.
 
 ---
 
-## ⚙️ Tech Stack
+## How the App Was Tested
 
-| Layer | Technology |
+After training, I tested it with two real patient records from the dataset:
+
+**Test 1 — Known diabetic patient:**
+Pregnancies: 6, Glucose: 148, BP: 72, Skin: 35, Insulin: 0, BMI: 33.6, Pedigree: 0.627, Age: 50
+Result: Diabetic — 86% probability ✓
+
+**Test 2 — Known non-diabetic patient:**
+Pregnancies: 1, Glucose: 85, BP: 66, Skin: 29, Insulin: 0, BMI: 26.6, Pedigree: 0.351, Age: 31
+Result: Not Diabetic — 1% probability ✓
+
+Both matched the actual labels in the dataset, which shows the model is working correctly.
+
+---
+
+## Tech Stack
+
+| What | Which tool |
 |---|---|
-| Language | Python 3.x |
-| ML Library | Scikit-learn |
-| Data Processing | Pandas, NumPy |
-| Visualization | Matplotlib, Seaborn |
-| Web Framework | Flask |
+| Programming language | Python 3 |
+| Data handling | Pandas, NumPy |
+| Machine learning | Scikit-learn |
+| Charts and plots | Matplotlib, Seaborn |
+| Web framework | Flask |
 | Frontend | HTML, CSS |
-| Model Saving | Pickle |
+| Saving the model | Pickle |
 
 ---
 
-## 🚀 How to Run
+## How to Run It Yourself
 
-### 1. Clone the repository
+**1. Clone the repo**
 ```bash
-git clone https://github.com/YOUR_USERNAME/diabetes-prediction.git
+git clone https://github.com/revanth838/diabetes-prediction.git
 cd diabetes-prediction
 ```
 
-### 2. Install dependencies
+**2. Install the required libraries**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Train the model
+**3. Train the model first**
 ```bash
 python train_model.py
 ```
-This will train all models, print accuracy comparison, and save `model.pkl` and `scaler.pkl`.
+This will print the accuracy of all three models in the terminal and save the best one along with the scaler inside the model/ folder. It also saves the EDA charts to static/.
 
-### 4. Run the web app
+**4. Start the web app**
 ```bash
 python app.py
 ```
 
-### 5. Open in browser
+**5. Open in browser**
 ```
 http://127.0.0.1:5000
 ```
 
 ---
 
-## 📦 Requirements
+## Known Limitations
 
-```
-flask
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-```
-
-Install all at once:
-```bash
-pip install flask pandas numpy scikit-learn matplotlib seaborn
-```
+- The dataset only has female patients aged 21 and above, so predictions may not be reliable for males or younger patients
+- 79% accuracy means roughly 1 in 5 predictions could be wrong — this is not a replacement for a proper medical test
+- Some feature values like insulin and skin thickness had many zero entries which were replaced with median values during preprocessing
 
 ---
 
-## 🔮 Future Scope
+## What I Plan to Add Next
 
-- Add more diseases (heart disease, kidney disease)
-- Improve accuracy using XGBoost or deep learning
-- Add user login and patient history tracking
-- Deploy on cloud (Render / AWS / Heroku)
-- Add SHAP values to explain predictions to patients
-
----
-
-## ⚠️ Disclaimer
-
-This application is built for educational purposes only. The predictions made by this model are **not a substitute for professional medical diagnosis**. Always consult a qualified doctor for medical advice.
+- Support for predicting heart disease and kidney disease using the same framework
+- A patient history page so previous predictions can be tracked
+- Better accuracy using XGBoost or a neural network
+- Deployment on a cloud platform so anyone can access it without installing anything
+- Explanation of why the model made a particular prediction using SHAP values
 
 ---
 
-## 👨‍💻 Author
+## Disclaimer
 
-**Revanth**
-Final Year Student — Artificial Intelligence
+This project was made for educational purposes as part of my final year AI curriculum. The predictions it gives are based on a statistical model trained on a limited dataset. Please do not use this as a substitute for actual medical diagnosis. Always consult a qualified doctor.
+
+---
+
+## Author
+
+Revanth
+Final Year — Artificial Intelligence
