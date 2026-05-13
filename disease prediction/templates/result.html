@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prediction Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="icon-circle">&#9877;</div>
+        <h1>Prediction Result</h1>
+      </div>
+
+      {% if error %}
+        <div class="result-box error">
+          <p>Something went wrong: {{ error }}</p>
+        </div>
+      {% else %}
+        <div class="result-box {{ 'danger' if result == 'Diabetic' else 'safe' }}">
+          <div class="result-label">Diagnosis</div>
+          <div class="result-value">{{ result }}</div>
+          <div class="risk-text">Diabetes Risk Probability: <strong>{{ risk }}%</strong></div>
+        </div>
+
+        <div class="risk-bar-wrap">
+          <div class="risk-bar" style="width: {{ risk }}%;
+            background: {{ '#E24B4A' if risk > 60 else '#EF9F27' if risk > 40 else '#1D9E75' }};"></div>
+        </div>
+
+        <div class="advice {{ 'danger' if result == 'Diabetic' else 'safe' }}">
+          {% if result == 'Diabetic' %}
+            <strong>Advice:</strong> The model suggests a high risk of diabetes. Please consult a doctor for a proper medical diagnosis. This is not a substitute for professional medical advice.
+          {% else %}
+            <strong>Advice:</strong> The model suggests a low risk of diabetes. Maintain a healthy diet and regular exercise to stay fit!
+          {% endif %}
+        </div>
+
+        {% if values %}
+        <div class="input-summary">
+          <p class="summary-title">Patient Input Summary</p>
+          <div class="summary-grid">
+            {% for key, val in values.items() %}
+            <div class="summary-item">
+              <span class="s-label">{{ key }}</span>
+              <span class="s-val">{{ val }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      {% endif %}
+
+      <a href="/" class="btn-back">&#8592; Predict Again</a>
+    </div>
+  </div>
+</body>
+</html>
